@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>CycleDiff: Cycle Diffusion Models for Unpaired Image-to-image Translation</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+
+<!-- <head>
+  <style>
+      /* 滑动容器样式 */
+      .slider-container {
+          width: 100%;
+          overflow-x: auto; /* 横向滚动 */
+          white-space: nowrap; /* 禁止换行 */
+          padding: 10px 0;
+          -webkit-overflow-scrolling: touch; /*  iOS平滑滚动 */
+      }
+      
+      /* 视频网格改为行内排列 */
+      .video-grid {
+          display: inline-flex; /* 行内Flex布局 */
+          gap: 15px;
+          padding: 0 10px;
+      }
+      
+      /* 视频卡片样式 */
+      .video-card {
+          width: 300px; /* 固定卡片宽度 */
+          height: 200px;
+          flex-shrink: 0; /* 禁止缩小 */
+          position: relative;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      
+      .video-card video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+      }
+  </style>
+</head> -->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>九宫格视频展示</title>
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      
+      body {
+          font-family: Arial, sans-serif;
+          padding: 20px;
+          background: #f5f5f5;
+      }
+      
+      h1 {
+          text-align: center;
+          margin-bottom: 30px;
+          color: #333;
+      }
+      
+      /* 九宫格容器 */
+      .video-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr); /* 3列 */
+          gap: 15px; /* 间距 */
+          max-width: 1200px;
+          margin: 0 auto;
+      }
+      
+      /* 视频卡片样式 */
+      .video-item {
+          position: relative;
+          padding-bottom: 50%; /* 1:1正方形比例 */
+          background: #000;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          transition: transform 0.3s;
+      }
+      
+      .video-item:hover {
+          transform: scale(1.02);
+      }
+      
+      .video-item video {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover; /* 填充容器并保持比例 */
+      }
+      
+      /* 响应式设计 */
+      @media (max-width: 900px) {
+          .video-grid {
+              grid-template-columns: repeat(2, 1fr); /* 平板端改为2列 */
+          }
+      }
+      
+      @media (max-width: 600px) {
+          .video-grid {
+              grid-template-columns: 1fr; /* 手机端改为1列 */
+          }
+          .video-item {
+              padding-bottom: 56.25%; /* 手机端改为16:9比例 */
+          }
+      }
+  </style>
+</head>
+
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">LaDiWM: A Latent Diffusion-based World Model for Predictive Manipulation</h1>
+              <h1 class="title is-2 publication-title">
+              </h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors --> 
+            <span class="author-block">
+              Yuhang Huang<sup>1</sup>,</span></span>
+            <span class="author-block">
+              Jiazhao Zhang<sup>2</sup>,</span></span>
+            <span class="author-block">
+              Shilong Zou<sup>1</sup>,</span>
+            </span>
+            <span class="author-block">
+              Xinwang Liu<sup>1</sup>,</span>
+            </span>
+            <span class="author-block">
+              Ruizhen Hu<sup>3*</sup>,</span>
+            </span>
+            <span class="author-block">
+              Kai Xu<sup>1*</sup>
+            </span>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block"><sup></sup>National University of Defense and Technology<sup>1</sup>, Peking University<sup>2</sup>, Shenzhen University<sup>3</sup> <br> CoRL 2025</span>
+                    <span class="eql-cntrb"><small><br><sup></sup> * Co-corresponding Author </small></span> 
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- Arxiv PDF link -->
+                      <!-- <span class="link-block">
+                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                      </span> -->
+
+                  <!-- Github link  "https://github.com/GuHuangAI/MS2A" --> 
+                  <span class="link-block">
+                    <a href="https://github.com/GuHuangAI/LaDiWM" target="_blank" 
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2505.11528" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+                <!-- Data Link -->
+                <!-- <span class="link-block">
+                  <a href="https://pan.baidu.com/s/1QIVEVO5n1RYEGndHPe6aRg?pwd=cfod" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-database"></i>
+                  </span>
+                  <span>CFOD Industrial Dataset</span>
+                </a>
+              </span> -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser video  height="100%" subtitle has-text-left--> 
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="teaser" width="100%" src="static/images/teaser3.png" alt="Teaser image demonstrating Marigold depth estimation."/>  
+      <h2 class="content has-text-justified">   
+        Our method consists of a latent diffusion-based world model and a corresponding predictive manipulation policy. (a): ① Given an initial action sequence generated by the policy, our world model produces imagined future states. ② These imagined states provide efficient guidance for the policy model, ③ yielding refined actions for improved manipulation. (b): Benefiting from our world model, we achieve significant improvements in both simulation and real-world performance.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+      </div>
+    </div>
+        <!-- <p align="center">
+          <img width="100%" src="./static/images/figure2-1.jpg" class="img-responsive" alt="overview">  <span class="methodname">
+        </p> -->
+
+        <div class="content has-text-justified">
+          <p>
+            Predictive manipulation has recently gained considerable attention in the Embodied AI community due to its potential to improve robot policy performance by leveraging predicted states. 
+            However, generating accurate future visual states of robot-object interactions from world models remains a well-known challenge, particularly in achieving high-quality pixel-level representations.
+          </p>
+          <p>
+            To this end, we propose LaDi-WM, a world model that predicts the latent space of future states using diffusion modeling. 
+            Specifically, LaDi-WM leverages the well-established latent space aligned with pre-trained Visual Foundation Models (VFMs), which comprises both geometric features (DINO-based) and semantic features (CLIP-based). We find that predicting the evolution of the latent space is easier to learn and more generalizable than directly predicting pixel-level images.
+          </p>
+          <p>
+            Building on LaDi-WM, we design a diffusion policy that iteratively refines output actions by incorporating forecasted states, thereby generating more consistent and accurate results. Extensive experiments on both synthetic and real-world benchmarks demonstrate that LaDi-WM significantly enhances policy performance by 27.9% on the LIBERO-LONG benchmark and 20% on the real-world scenario. 
+            Furthermore, our world model and policies achieve impressive generalizability in real-world experiments.
+          </p>
+        </div>
+      
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+      </div>
+    </div>
+  </div>
+        <div class="hero-body">
+          <div class="container">
+            <div id="results-carousel" class="carousel results-carousel">
+            <div class="item">
+              <img width="70%" src="static/images/Overvall3.png" alt="MY ALT TEXT"/>
+              <h2 class="subtitle has-text-justified">
+                <br>
+                <br>
+                <br>
+                Overall framework of the proposed method. We first train LaDi-WM on task-agnostic clips, which benefits cross-task generalization. 
+            The trained world model is used to generate future imagined states, which serve as effective guidance and input to the policy network, improving the manipulation performance significantly.
+             </h2>
+           </div>
+           <div class="item">
+            <img width="70%" src="static/images/InteractiveDiffusion.png" alt="MY ALT TEXT"/>
+            <h2 class="subtitle has-text-justified">
+              We propose to learn the environmental dynamics in a more compact and generalizable latent space. 
+            To capture both geometric and semantic information from the environment, we utilize pretrained foundation models (DINO and Siglip) to extract these two types of features as latent states. 
+            Specifically, we introduce an interactive diffusion process to model the two types of latent dynamics, which follow different distributions. 
+            The interactive diffusion avoids the difficulty of learning two mismatched distributions simultaneously and allows for effective interaction between two dynamic predictions.
+           </h2>
+          </div>
+           <div class="item">
+            <img width="60%" src="static/images/PolicyModel.png" alt="MY ALT TEXT"/>
+            <h2 class="subtitle has-text-justified">
+              We employ a diffusion policy to learn the robotic manipulation. There are two processes in the diffusion policy: the noising and denoising processes. 
+            In the noising stage, we gradually add the Gaussian noise to the ground truth action until it is pure noise; while we leverage the transformer layers to learn the denoising process for recovering the action. 
+            We first tokenize the different modalities of inputs, which are fed into the transformer encoder and decoder to obtain the final output.
+           </h2>
+          </div>
+          <!-- <div class="item" style="flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <img height="100%" src="static/images/S2T1.jpg" alt="MY ALT TEXT"/>
+            <h2 class="subtitle has-text-left">
+              Quantitative results on Indus-S &rarr; Indus-T2.
+            </h2>
+          </div> -->
+        </div>
+
+
+        <!-- <div class="content has-text-justified">
+
+          <h3 class="title has-text-centered">
+            Overall Framework
+          </h3>
+          <img width="100%" src="static/images/Overvall3.png" width="1000px" alt="MY ALT TEXT"/>
+          <p>
+            Overall framework of the proposed method. We first train LaDi-WM on task-agnostic clips, which benefits cross-task generalization. 
+            The trained world model is used to generate future imagined states, which serve as effective guidance and input to the policy network, improving the manipulation performance significantly.
+          </p>
+
+          <h3 class="title has-text-centered">
+            Latent World Modeling with Interactive Diffusion
+          </h3>
+          <img id="method_inference" width="100%" src="./static/images/InteractiveDiffusion.png" alt="MY ALT TEXT"/>
+
+          <p>
+            We propose to learn the environmental dynamics in a more compact and generalizable latent space. 
+            To capture both geometric and semantic information from the environment, we utilize pretrained foundation models (DINO and Siglip) to extract these two types of features as latent states. 
+            Specifically, we introduce an interactive diffusion process to model the two types of latent dynamics, which follow different distributions. The interactive diffusion avoids the difficulty of learning two mismatched distributions simultaneously and allows for effective interaction between two dynamic predictions.
+          </p>   
+          
+          <h3 class="title has-text-centered">
+            Diffusion Policy with Imagined Guidance
+          </h3>
+          <img width="80%" src="static/images/PolicyModel.png" width="1000px" alt="MY ALT TEXT" style="display: block; margin: 0 auto;" />
+          <p>
+            We employ a diffusion policy to learn the robotic manipulation. There are two processes in the diffusion policy: the noising and denoising processes. 
+            In the noising stage, we gradually add the Gaussian noise to the ground truth action until it is pure noise; while we leverage the transformer layers to learn the denoising process for recovering the action. 
+            We first tokenize the different modalities of inputs, which are fed into the transformer encoder and decoder to obtain the final output.
+          </p>
+        </div> -->
+    <!-- </div>
+  </div> -->
+</section>
+
+
+<!-- Image carousel -->
+<!-- <section class="hero is-small"> -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Quantitative Results</h2>
+      </div>
+    </div>
+  </div>
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+      <div class="item">
+        <img width="60%" src="static/images/Main-Performance.png" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-left--">
+          Quantitative comparisons with state-of-the-art methods. Note the results on LIBERO-LONG are obtained using only 10 demonstrations.
+       </h2>
+     </div>
+     <div class="item">
+      <img width="60%" src="static/images/libero-best-performance.png" alt="MY ALT TEXT"/>
+      <!-- <h2 class="subtitle has-text-left--">
+        Quantitative comparisons with state-of-the-art methods. Note the results on LIBERO-LONG are obtained using only 10 demonstrations.
+     </h2> -->
+    </div>
+     <div class="item">
+      <img width="90%" src="static/images/data_scale.png" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-left">
+        Scalability of our method. (a) scaling up the training data of the world model; (b) scaling up the training data of the policy model; (c) scaling up the model size of the policy model.
+      </h2>
+    </div>
+    <!-- <div class="item" style="flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <img height="100%" src="static/images/S2T1.jpg" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-left">
+        Quantitative results on Indus-S &rarr; Indus-T2.
+      </h2>
+    </div> -->
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Qualitative results</h2>
+        <!-- <div class="box"> -->
+          <!-- 待完成的 -->
+          <!-- <h4 style="font: normal 400 20px/30px 'STHupo';">待完成</h4> -->
+          <!-- <ol id="doList">
+            &#9745; Training in a 640 * 320 resolution on RGB&lrarr;Dpeth
+          </ol>
+          <hr style="margin: 10px;"> -->
+          <!-- <h4 style="font: normal 400 20px/30px 'STHupo';">已完成</h4> &#9745
+          <ol id="todolist">
+          </ol> -->
+        <!-- <h2 class="subtitle has-text-centered">
+          Comming soon.
+        </h2> -->
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+
+  <div class="hero-body"></div>
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+          <div class="video-grid">
+              <!-- 重复9次 -->
+            <div class="video-item">
+                <video controls muted loop>
+                    <source src="./static/images/epoch_final/env_0.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_1.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_3.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_4.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_5.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_6.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_7.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_8.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="video-item">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_9.mp4" type="video/mp4">
+              </video>
+            </div>
+            <!-- <div class="video-card">
+                <video controls muted loop>
+                    <source src="./static/images/epoch_final/env_0.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_1.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_2.mp4" type="video/mp4">
+              </video>
+            </div> -->
+            <!-- <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_3.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_4.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_5.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_6.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_7.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card">
+              <video controls muted loop>
+                  <source src="./static/images/epoch_final/env_9.mp4" type="video/mp4">
+              </video>
+            </div> -->
+          </div>
+
+        <!-- <img width="60%" src="static/images/Cyclediff_2-kitti_rgb2depth.drawio_page-0001.jpg" alt="MY ALT TEXT"/> -->
+        <!-- <h2 class="subtitle has-text-left--">
+          Qualitative results on RGB&rarr;Depth task with more larger resolution.
+       </h2> -->
+
+       <div class="video-grid">
+        <!-- 重复9次 -->
+        <div class="video-item">
+          <video controls muted loop>
+              <source src="./static/images/stack2.mp4" type="video/mp4">
+          </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/stack1.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/close1.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/close3.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/open3.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/grasp2.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/grasp3.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/grasp4.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-item">
+        <video controls muted loop>
+            <source src="./static/images/grasp7.mp4" type="video/mp4">
+        </video>
+      </div>
+      </div>
+    </div>
+     </div>
+     <!-- <div class="item">
+      <img width="60%" src="static/images/Cyclediff_2-kitti_depth2rgb.drawio_page-0001.jpg" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-left">
+        Qualitative results on Depth&rarr;RGB task with more larger resolution. 
+      </h2>
+    </div> -->
+    <!-- <div class="item" style="flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <img height="100%" src="static/images/S2T1.jpg" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-left">
+        Quantitative results on Indus-S &rarr; Indus-T2.
+      </h2>
+    </div> -->
+  </div>
+</div>
+</div>
+
+</section>
+
+<!-- Paper poster  -->
+<!-- <section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title">Poster</h2>
+      <iframe  src="static/pdfs/CFOD.pdf" width="100%" height="550">
+          </iframe>
+      </div>
+    </div>
+  </section> -->
+<!--End paper poster -->
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@inproceedings{huang2025ladi,
+        title={LaDi-WM: A Latent Diffusion-based World Model for Predictive Manipulation},
+        author={Huang, Yuhang and Zhang, Jiazhao and Zou, Shilong and Liu, Xinwang and Hu, Ruizhen and Xu, Kai},
+        booktitle={CoRL},
+        year={2025}
+      }
+      </code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+  <!-- <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This website template was borrowed from <a href="https://nerfies.github.io" target="_blank">https://nerfies.github.io</a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer> -->
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
