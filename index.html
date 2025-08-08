@@ -273,6 +273,7 @@
         </p> -->
 
         <div class="content has-text-justified">
+        <!-- <h2 class="content has-text-justified">   -->
           <p>
             Predictive manipulation has recently gained considerable attention in the Embodied AI community due to its potential to improve robot policy performance by leveraging predicted states. 
             However, generating accurate future visual states of robot-object interactions from world models remains a well-known challenge, particularly in achieving high-quality pixel-level representations.
@@ -285,6 +286,7 @@
             Building on LaDi-WM, we design a diffusion policy that iteratively refines output actions by incorporating forecasted states, thereby generating more consistent and accurate results. Extensive experiments on both synthetic and real-world benchmarks demonstrate that LaDi-WM significantly enhances policy performance by 27.9% on the LIBERO-LONG benchmark and 20% on the real-world scenario. 
             Furthermore, our world model and policies achieve impressive generalizability in real-world experiments.
           </p>
+        <!-- </h2> -->
         </div>
       
   </div>
@@ -304,17 +306,21 @@
             <div id="results-carousel" class="carousel results-carousel">
             <div class="item">
               <img width="70%" src="static/images/Overvall3.png" alt="MY ALT TEXT"/>
-              <h2 class="subtitle has-text-justified">
+              <!-- <div class="content has-text-justified"> -->
+              <h2 class="subtitle has-text-justified" style="width: 950px;">
+              <!-- <h2 class="content has-text-justified">  -->
                 <br>
                 <br>
-                <br>
+                <p>
                 Overall framework of the proposed method. We first train LaDi-WM on task-agnostic clips, which benefits cross-task generalization. 
             The trained world model is used to generate future imagined states, which serve as effective guidance and input to the policy network, improving the manipulation performance significantly.
-             </h2>
+                </p> 
+            </h2>
+              <!-- </div> -->
            </div>
            <div class="item">
-            <img width="70%" src="static/images/InteractiveDiffusion.png" alt="MY ALT TEXT"/>
-            <h2 class="subtitle has-text-justified">
+            <img width="70%"  src="static/images/InteractiveDiffusion.png" alt="MY ALT TEXT"/>
+            <h2 class="subtitle has-text-justified" style="width: 950px;">
               We propose to learn the environmental dynamics in a more compact and generalizable latent space. 
             To capture both geometric and semantic information from the environment, we utilize pretrained foundation models (DINO and Siglip) to extract these two types of features as latent states. 
             Specifically, we introduce an interactive diffusion process to model the two types of latent dynamics, which follow different distributions. 
@@ -322,8 +328,8 @@
            </h2>
           </div>
            <div class="item">
-            <img width="60%" src="static/images/PolicyModel.png" alt="MY ALT TEXT"/>
-            <h2 class="subtitle has-text-justified">
+            <img style="width: 60%; aspect-ratio: 16/9;" src="static/images/PolicyModel.png" alt="MY ALT TEXT"/>
+            <h2 class="subtitle has-text-justified" style="width: 950px;">
               We employ a diffusion policy to learn the robotic manipulation. There are two processes in the diffusion policy: the noising and denoising processes. 
             In the noising stage, we gradually add the Gaussian noise to the ground truth action until it is pure noise; while we leverage the transformer layers to learn the denoising process for recovering the action. 
             We first tokenize the different modalities of inputs, which are fed into the transformer encoder and decoder to obtain the final output.
@@ -390,7 +396,7 @@
       <div id="results-carousel" class="carousel results-carousel">
       <div class="item">
         <img width="60%" src="static/images/Main-Performance.png" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-left--">
+        <h2 class="subtitle has-text-left--" style="width: 950px;">
           Quantitative comparisons with state-of-the-art methods. Note the results on LIBERO-LONG are obtained using only 10 demonstrations.
        </h2>
      </div>
@@ -402,7 +408,7 @@
     </div>
      <div class="item">
       <img width="90%" src="static/images/data_scale.png" alt="MY ALT TEXT"/>
-      <h2 class="subtitle has-text-left">
+      <h2 class="subtitle has-text-left" style="width: 1220px;">
         Scalability of our method. (a) scaling up the training data of the world model; (b) scaling up the training data of the policy model; (c) scaling up the model size of the policy model.
       </h2>
     </div>
